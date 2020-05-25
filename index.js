@@ -16,4 +16,53 @@
 
 // User GitHub profile picture
 // User GitHub email
+const inquirer = require('inquirer');
+// Project title
+inquirer.prompt([
+    {
+        type: 'input',
+        name: 'title',
+        message: 'Project title?',
+    },
+    // Description
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Description of project?',
+    },
+    //TOC
+    {
+
+    },
+    //Installation
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'Installation instructions',
+    },
+    //license
+    {
+        type: 'input',
+        name: 'license',
+        message: 'license:',
+    },
+    // Contributing
+    {
+        type: 'input',
+        name: 'contributing',
+        message: 'list who constributed to project:',
+    },
+    // Tests
+    {
+        type: 'input',
+        name: 'tests',
+        message: 'list test:',
+    },
+    // Quest
+    {
+        type: 'input',
+        name: 'questions',
+        message: 'list questions:',
+    },
+])
 
