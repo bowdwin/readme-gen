@@ -18,6 +18,7 @@
 // User GitHub email
 const inquirer = require('inquirer');
 const fs = require('fs');
+const axios = require('axios');
 // Project title
 inquirer.prompt([
     {
@@ -25,10 +26,10 @@ inquirer.prompt([
         name: 'title',
         message: 'Project title?',
     },
-    // about
+    // description
     {
         type: 'input',
-        name: 'about',
+        name: 'description',
         message: 'Description of project?',
     },
     //Installation
@@ -59,7 +60,7 @@ inquirer.prompt([
     {
         type: 'input',
         name: 'tests',
-        message: 'any test performed for this?',
+        message: 'any test performed for this in the test Env? What were they?',
     },
     // Quest
     {
@@ -84,14 +85,26 @@ let createReadmeFile = (answers) => {
     return (`
  # Project title: ${answers.title}
 
- ## About/Desciprtion: 
-    ${answers.about}
+ ## Table of Contense:
+    * [Description](#description)
 
-## installation instructions:
-    ${answers.installation}
+ ## Description 
+${answers.description}
 
-    ## About/Desciprtion: 
-    ${answers.installation}
+##installation instructions:
+${answers.installation}
+
+## License: 
+${answers.license}
+
+## Constributing: 
+${answers.contributing}
+
+## Test's performed in test env and description of tests: 
+${answers.tests}
+
+## Questions:
+${answers.questions}
 
  `)
 };
