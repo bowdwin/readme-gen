@@ -17,6 +17,7 @@
 // User GitHub profile picture
 // User GitHub email
 const inquirer = require('inquirer');
+const fs = require('fs');
 // Project title
 inquirer.prompt([
     {
@@ -24,27 +25,29 @@ inquirer.prompt([
         name: 'title',
         message: 'Project title?',
     },
-    // Description
+    // about
     {
         type: 'input',
-        name: 'description',
+        name: 'about',
         message: 'Description of project?',
-    },
-    //TOC
-    {
-
     },
     //Installation
     {
         type: 'input',
         name: 'installation',
-        message: 'Installation instructions',
+        message: 'Any Installation instructions?',
     },
     //license
     {
-        type: 'input',
+        type: 'list',
         name: 'license',
-        message: 'license:',
+        message: 'Please select a license',
+        choices: [
+            'lic1',
+            'lic2',
+            'lic3',
+            "skip"
+        ]
     },
     // Contributing
     {
@@ -56,7 +59,7 @@ inquirer.prompt([
     {
         type: 'input',
         name: 'tests',
-        message: 'list test:',
+        message: 'any test performed for this?',
     },
     // Quest
     {
@@ -64,5 +67,34 @@ inquirer.prompt([
         name: 'questions',
         message: 'list questions:',
     },
-])
+]).then((answers) => {
+    answers.tableOfContents;
+    console.log(answers);
+    //call write to readme function and create readme.d
+    fs.writeFile("README.md", createReadmeFile(answers), function (err) {
+        if (err) {
+            throw err;
+        }
+        // console.log(`Saved ${repoNames.length} repos`);
+    });
+});
+
+//write to file
+let createReadmeFile = (answers) => {
+    return (`
+ # Project title: ${answers.title}
+
+ ## About/Desciprtion: 
+    ${answers.about}
+
+## installation instructions:
+    ${answers.installation}
+
+    ## About/Desciprtion: 
+    ${answers.installation}
+
+ `)
+};
+
+
 
