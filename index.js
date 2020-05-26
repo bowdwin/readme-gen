@@ -83,28 +83,34 @@ inquirer.prompt([
 //write to file
 let createReadmeFile = (answers) => {
     return (`
- # Project title: ${answers.title}
+# Project title: ${answers.title}
 
- ## Table of Contense:
-    * [Description](#description)
+## Table of contents:
 
- ## Description 
-${answers.description}
+    * [Description](#Description)
+    * [Installation](#Installation-Instructions)
+    * [License](#License)
+    * [Contributing](#Contributing)
+    * [Tests](#Tests)
+    * [Questions](#Questions)
 
-##installation instructions:
-${answers.installation}
+## Description 
+    ${answers.description}
+
+## Installation Instructions:
+    ${answers.installation}
 
 ## License: 
-${answers.license}
+    ${answers.license}
 
-## Constributing: 
-${answers.contributing}
+## Contributing: 
+    ${answers.contributing}
 
-## Test's performed in test env and description of tests: 
-${answers.tests}
+## Tests: 
+    ${answers.tests}
 
 ## Questions:
-${answers.questions}
+    ${answers.questions}
 
  `)
 };
