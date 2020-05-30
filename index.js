@@ -16,83 +16,97 @@
 
 // User GitHub profile picture
 // User GitHub email
-const inquirer = require('inquirer');
-const fs = require('fs');
-const axios = require('axios');
+const inquirer = require("inquirer");
+const fs = require("fs");
+const axios = require("axios");
 // Project title
-inquirer.prompt([
+inquirer
+  .prompt([
     {
-        type: 'input',
-        name: 'title',
-        message: 'Project title?',
+      type: "input",
+      name: "username",
+      message: "Enter your Github Username",
+    },
+    {
+      type: "input",
+      name: "title",
+      message: "Project title?",
     },
     // description
     {
-        type: 'input',
-        name: 'description',
-        message: 'Description of project?',
+      type: "input",
+      name: "description",
+      message: "Description of project?",
     },
     //Installation
     {
-        type: 'input',
-        name: 'installation',
-        message: 'Any Installation instructions?',
+      type: "input",
+      name: "installation",
+      message: "Any Installation instructions?",
     },
     //license
     {
-        type: 'list',
-        name: 'license',
-        message: 'Please select a license',
-        choices: [
-            'lic1',
-            'lic2',
-            'lic3',
-            "skip"
-        ]
+      type: "list",
+      name: "license",
+      message: "Please select a license",
+      choices: ["lic1", "lic2", "lic3", "skip"],
     },
     // Contributing
     {
-        type: 'input',
-        name: 'contributing',
-        message: 'list who constributed to project:',
+      type: "input",
+      name: "contributing",
+      message: "list who constributed to project:",
     },
     // Tests
     {
-        type: 'input',
-        name: 'tests',
-        message: 'any test performed for this in the test Env? What were they?',
+      type: "input",
+      name: "tests",
+      message: "any test performed for this in the test Env? What were they?",
     },
     // Quest
     {
-        type: 'input',
-        name: 'questions',
-        message: 'list questions:',
+      type: "input",
+      name: "questions",
+      message: "list questions:",
     },
-]).then((answers) => {
-    answers.tableOfContents;
+  ])
+  .then((answers) => {
     console.log(answers);
-    //call write to readme function and create readme.d
-    fs.writeFile("README.md", createReadmeFile(answers), function (err) {
-        if (err) {
-            throw err;
-        }
-        // console.log(`Saved ${repoNames.length} repos`);
+    console.log(answers.username);
+    const queryUrl = `https://api.github.com/users/${answers.username}`;
+    axios.get(queryUrl).then((response) => {
+      console.log(response.data);
+
+      console.log(response.data.avatar_url);
+      const avatar = response.data.avatar_url;
+      // callQuestions(response.data.avatar_url);
     });
-});
+
+    console.log(queryUrl);
+    //call write to readme function and create readme
+    fs.writeFile("README.md", createReadmeFile(answers, avatar), function (
+      err
+    ) {
+      if (err) {
+        throw err;
+      }
+      // console.log(`Saved ${repoNames.length} repos`);
+    });
+  });
 
 //write to file
-let createReadmeFile = (answers) => {
-    return (`
+let createReadmeFile = (answers, response) => {
+  return `
 # Project title: ${answers.title}
 
 ## Table of contents:
 
-    * [Description](#Description)
-    * [Installation](#Installation-Instructions)
-    * [License](#License)
-    * [Contributing](#Contributing)
-    * [Tests](#Tests)
-    * [Questions](#Questions)
+* [Description](#Description)
+* [Installation](#Installation-Instructions)
+* [License](#License)
+* [Contributing](#Contributing)
+* [Tests](#Tests)
+* [Questions](#Questions)
 
 ## Description 
     ${answers.description}
@@ -112,8 +126,7 @@ let createReadmeFile = (answers) => {
 ## Questions:
     ${answers.questions}
 
- `)
+    ${avatar}
+
+ `;
 };
-
-
-
