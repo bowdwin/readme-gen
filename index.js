@@ -61,16 +61,14 @@ inquirer
     },
   ])
   //Grab answers from above questions
-  .then(function (answers) {
+  .then((answers) => {
     //make an api call to github for username
     const queryUrl = `https://api.github.com/users/${answers.username}`;
     axios
       .get(queryUrl)
 
-      .then(function (github) {
-        fs.writeFile("README.md", createReadMe(answers, github), function (
-          err
-        ) {
+      .then((github) => {
+        fs.writeFile("README.md", createReadMe(answers, github), (err) => {
           if (err) {
             return console.log(err);
           }
@@ -81,7 +79,7 @@ inquirer
   });
 
 // Write file contents
-let createReadMe = function (answers, github) {
+let createReadMe = (answers, github) => {
   return `[![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
 # Project title: ${answers.title}
 
