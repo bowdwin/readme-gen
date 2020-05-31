@@ -1,32 +1,16 @@
-// Create a command-line application that dynamically generates a README.md from a user's input. The application will be invoked with the following command:
-// node index.js
-// The user will be prompted for their GitHub username and other information pertaining to the project the README is for.
-// The README will be populated with the following:
-
-// At least one badge
-// Project title
-// Description
-// Table of Contents
-// Installation
-// Usage
-// License
-// Contributing
-// Tests
-// Questions
-
-// User GitHub profile picture
-// User GitHub email
 const inquirer = require("inquirer");
 const fs = require("fs");
 const axios = require("axios");
 // Project title
 inquirer
   .prompt([
+    //Prompt for username on github
     {
       type: "input",
       name: "username",
-      message: "Enter your Github Username",
+      message: "Enter your Github Username?",
     },
+    //Project title
     {
       type: "input",
       name: "title",
@@ -44,18 +28,24 @@ inquirer
       name: "installation",
       message: "Any Installation instructions?",
     },
+    //how to use project
+    {
+      type: "input",
+      name: "usage",
+      message: "What is the expected use of this repo?",
+    },
     //license
     {
       type: "list",
       name: "license",
       message: "Please select a license",
-      choices: ["lic1", "lic2", "lic3", "skip"],
+      choices: ["MIT", "Apache", "GPL"],
     },
     // Contributing
     {
       type: "input",
       name: "contributing",
-      message: "list who constributed to project:",
+      message: "Who are the contributing authors?",
     },
     // Tests
     {
@@ -67,37 +57,36 @@ inquirer
     {
       type: "input",
       name: "questions",
-      message: "list questions:",
+      message: "Who does one contact for questions about the repo, and how?",
     },
   ])
-  .then((answers) => {
-    console.log(answers);
-    console.log(answers.username);
+  //Grab answers from above questions
+  .then(function (answers) {
+    //make an api call to github for username
     const queryUrl = `https://api.github.com/users/${answers.username}`;
-    axios.get(queryUrl).then((response) => {
-      console.log(response.data);
+    axios
+      .get(queryUrl)
 
-      console.log(response.data.avatar_url);
-      const avatar = response.data.avatar_url;
-      // callQuestions(response.data.avatar_url);
-    });
+      .then(function (github) {
+        fs.writeFile("README.md", createReadMe(answers, github), function (
+          err
+        ) {
+          if (err) {
+            return console.log(err);
+          }
 
-    console.log(queryUrl);
-    //call write to readme function and create readme
-    fs.writeFile("README.md", createReadmeFile(answers, avatar), function (
-      err
-    ) {
-      if (err) {
-        throw err;
-      }
-      // console.log(`Saved ${repoNames.length} repos`);
-    });
+          console.log("Success!");
+        });
+      });
   });
 
-//write to file
-let createReadmeFile = (answers, response) => {
-  return `
+// Write file contents
+let createReadMe = function (answers, github) {
+  return `[![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
 # Project title: ${answers.title}
+
+## Description
+    ${answers.description}
 
 ## Table of contents:
 
@@ -108,25 +97,27 @@ let createReadmeFile = (answers, response) => {
 * [Tests](#Tests)
 * [Questions](#Questions)
 
-## Description 
-    ${answers.description}
-
 ## Installation Instructions:
     ${answers.installation}
 
-## License: 
+## Expected use of repo:
+    ${answers.usage}
+
+## License:
     ${answers.license}
 
-## Contributing: 
+## Contributing:
     ${answers.contributing}
 
-## Tests: 
+## Tests:
     ${answers.tests}
 
 ## Questions:
     ${answers.questions}
 
-    ${avatar}
-
- `;
+## Portfolio Image
+![Image GitHub user](${github.data.avatar_url})
+## Portfolio Username
+${github.data.blog}
+  `;
 };
